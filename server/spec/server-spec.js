@@ -16,7 +16,7 @@ describe("Persistent Node Chat Server", function() {
     });
     dbConnection.connect();
 
-       var tablename = ""; // TODO: fill this out
+       var tablename = "messages"; // TODO: fill this out
 
     /* Empty the db table before each test so that multiple tests
      * (or repeated runs of the tests) won't screw each other up: */
@@ -38,7 +38,7 @@ describe("Persistent Node Chat Server", function() {
               uri: "http://127.0.0.1:3000/classes/messages",
               json: {
                 username: "Valjean",
-                message: "In mercy's name, three days is all I need.",
+                text: "In mercy's name, three days is all I need.",
                 roomname: "Hello"
               }
       }, function () {
@@ -55,7 +55,7 @@ describe("Persistent Node Chat Server", function() {
           expect(results.length).to.equal(1);
 
           // TODO: If you don't have a column named text, change this test.
-          expect(results[0].text).to.equal("In mercy's name, three days is all I need.");
+          expect(results[0].messageText).to.equal("In mercy's name, three days is all I need.");
 
           done();
         });
@@ -65,8 +65,8 @@ describe("Persistent Node Chat Server", function() {
 
   it("Should output all messages from the DB", function(done) {
     // Let's insert a message into the db
-       var queryString = "";
-       var queryArgs = [];
+       var queryString = "INSERT INTO messages VALUES (DEFAULT, ?, (SELECT id from users WHERE name=?), (SELECT id from rooms WHERE name=?), ?)";
+       var queryArgs = ["Men like you can never change!", new Date()];
     // TODO - The exact query string and query args to use
     // here depend on the schema you design, so I'll leave
     // them up to you. */
